@@ -1,9 +1,23 @@
 from typing import List, Tuple
 from datetime import datetime
-import pandas as pd
+import json
 
+def read_json(file_path, fields):
+    file1 = open(file_path, 'r')
+    Lines = file1.readlines()
+    data = []
+
+    for line in Lines:
+        json_value = json.loads(line)
+        user = json_value.get("user").get("username")
+        date = json_value.get("date")
+        data.append({"user":user, "date":date})
+
+    return pd.DataFrame(data)
+    
 def q1_time(file_path: str) -> List[Tuple[datetime.date, str]]:
-    tweets_data = pd.read_json(file_path, lines = "records")
+    #tweets_data = pd.read_json(file_path, lines = "records")
+    tweets_data = read_json(file_path)
 
     #Get top 10 dates
     tweets_data = tweets_data[["date","user","id"]]
